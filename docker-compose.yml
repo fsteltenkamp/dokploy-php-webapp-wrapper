@@ -1,0 +1,15 @@
+volumes:
+  caddy_data: {}
+  persistent_data: {}
+
+services:
+  image: dunglas/frankenphp:php${PHP_VERSION:-8.4}
+  restart: unless-stopped
+  volumes:
+    - ./App/src:/app/src
+    - ./Caddyfile:/etc/frankenphp/Caddyfile
+    - caddy_data:/data
+    # If your application has dynamic data you want to keep, such as logfiles, uploads etc.
+    # these should be in a different location and be saved on a docker volume instead of a bind mount
+    # Dokploy may re-download the entire repository, so its possible to lose all data that is not present in the git repo.
+    - persistent_data:/app/storage
